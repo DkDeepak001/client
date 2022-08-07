@@ -16,6 +16,7 @@ import code800 from "./components/images/raimond-klavins-a-Xz1GNZDa8-unsplash.jp
 import code801 from "./components/images/lukasz-lada-q7z-AUlHPaw-unsplash.jpg";
 import codeDefault from "./components/images/raimond-klavins-iyO88eEUKec-unsplash (1).jpg";
 import Clock from './components/clock';
+import swal from 'sweetalert';
 function App() {
 
   const [data, setData] = useState();
@@ -42,6 +43,7 @@ function App() {
       if (city === "") {
         navigator.geolocation.getCurrentPosition(success, error);
         async function success(pos) {
+         try {
           const crd = pos.coords;
           const req = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${crd.latitude}&lon=${crd.longitude}&cnt=8&appid=0050554df76069000b6244f23bb336fd`)
           const currentData = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&&appid=0050554df76069000b6244f23bb336fd`)
@@ -57,13 +59,20 @@ function App() {
             weather: req.data.list
           })
           return
+         }catch (err) {
+          if(err.response.status ==404){
+           swal("Error!", "Please enter the correct Location!", "error");
+         }  
+          
+         }
         }
 
         function error(err) {
           alert("please enable location access to get current data");
         }
       } else {
-        const req = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&cnt=8&appid=0050554df76069000b6244f23bb336fd`);
+        try {
+          const req = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&cnt=8&appid=0050554df76069000b6244f23bb336fd`);
         const currentData = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=0050554df76069000b6244f23bb336fd`)
         setCurrentWeather({
           name: currentData.data.weather[0].main,
@@ -78,6 +87,13 @@ function App() {
 
         })
         return
+        } catch (err) {
+         if(err.response.status ==404){
+          swal("Error!", "Please enter the correct Location!", "error");
+        }  
+         
+        } 
+      
       }
 
 

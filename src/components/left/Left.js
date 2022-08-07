@@ -13,12 +13,12 @@ function Left(props) {
       {/* <input type="text" onChange={updateCity} value={city}></input>
       <button onClick={() => props.changeCity(city)}>Check</button> */}
       
-      <form >
+      <div className='form' >
         <input type="text" className="textbox" placeholder="Enter a city to search weather" onChange={updateCity} value={city} />
         <button className="button"  title="Search" onClick={() => {props.changeCity(city);setCity("")}} > <i class="fa fa-search"></i></button>
 
 
-      </form>
+      </div>
     </div>
   )
 }
