@@ -17,6 +17,7 @@ import code801 from "./components/images/lukasz-lada-q7z-AUlHPaw-unsplash.jpg";
 import codeDefault from "./components/images/raimond-klavins-iyO88eEUKec-unsplash (1).jpg";
 import Clock from './components/clock';
 import swal from 'sweetalert';
+import {motion} from 'framer-motion';
 function App() {
 
   const [data, setData] = useState();
@@ -90,78 +91,29 @@ function App() {
         } catch (err) {
          if(err.response.status ==404){
           swal("Error!", "Please enter the correct Location!", "error");
-        }  
-         
-        } 
-      
+        }           
+        }       
       }
-
-
     }
-    getData()
+    getData();
   }, [city])
 
 
 
-  function setImage(code){
-    if(code <= 200 || code <=299) {
-      setBgImg("./components/images/tasos-mansour-_hGPdpyMV-8-unsplash.jpg");
-    }else if( code <= 300 || code <= 399){
-      setBgImg("./components/images/hafidh-satyanto-UytSb_a2YE0-unsplash.jpg")
-    }else if(code <= 500 || code <= 599){
-      setBgImg("./components/images/natsuki-4DsowKunk84-unsplash.jpg");
-    }else if(code <= 600 || code <= 699){
-      setBgImg("./components/images/federico-bottos-vOrTxzT5KCo-unsplash.jpg");
-    }else if(code === 701){
-     setBgImg("./components/images/goran-vucicevic-EuuIa8XTLK4-unsplash.jpg");
-    }else if(code === 711){
-      setBgImg('./components/images/daniel-gregoire-hZe5eOlvqDk-unsplash.jpg');
-    }else if(code === 721){
-      setBgImg("./components/images/paul-earle-l98YXp1X8dA-unsplash.jpg");
-    }else if(code === 731){
-      setBgImg("./components/images/noaa-vh45wCZMRyA-unsplash.jpg");
-    }else if(code == 741){
-      setBgImg("./components/images/jakub-kriz-arOyDPUAJzc-unsplash.jpg")
-    }else if(code === 800){
-      setBgImg("./components/images/ritam-baishya-ROVBDer29PQ-unsplash.jpg")
-    }else if(code <= 801 || code <=804){
-      setBgImg("./components/images/ritam-baishya-ROVBDer29PQ-unsplash.jpg");
-    }else {
-      setBgImg("./components/images/raimond-klavins-iyO88eEUKec-unsplash (1).jpg");
-    }
-
-  }
-  return (
-    <div className='main-container'>
-      <div className='right-container-bg'>
+function Display(){
+  return(
+    <motion.div  className='right-container-bg'  animate={{opacity:1}} initial={{opacity:.2}} transition={{duration:.5}}>
         <img src={currentWeather.code <=200 ? code200 :(currentWeather.code <= 300 ? code300 : (currentWeather.code <=500 ? code500 :(currentWeather.code <= 600 ? code600 : (currentWeather.code === 701 ? code701 : (currentWeather.code === 711 ? code711 : (currentWeather.code === 721 ? code721 : (currentWeather.code === 731 ? code731 : (currentWeather.code === 741 ? code741 : (currentWeather.code === 800 ? code800:(currentWeather.code <= 801 || currentWeather.code <= 804 ? code801 :codeDefault))))))))))   }></img>
-      </div>
-      <div className='left-container'>
-        {/* {console.log(weather.weather.map((e) =>  (    ))} */}
-        <div className='left-container-align'>
-          <Left changeCity={(name => setCity(name))} />
-        <div className='left-container-forecastData-container'>
-          <h2 className='left-container-forecastData-heading'> forecast of {weather.name} next few hours</h2>
-            <div className='left-container-forecastData'>
-              <ul>
-                  {weather.weather.map((e, index) => (new Date()) <= (new Date(e.dt_txt)) ?
-                  <div key={index} className="forecast-single-container">
-                    <img src={`http://openweathermap.org/img/wn/${e.weather[0].icon}@2x.png`}></img>
-                    <h2>{(e.main.temp - 273.5).toFixed(1)}°C</h2>
-                    <h4>{e.weather[0].main}</h4>
-                    <h5>{ new Date(e.dt_txt).toLocaleTimeString()}</h5>
-                  </div> : <> </>
-                  )}
-                </ul>
-            </div>
-        </div>
-        </div>
-      </div>
-      <div className='right-container'>
-        <div className='right-container-text'>
+      </motion.div>
+  )
+}
+
+function AnimationRight(){
+  return(
+    <motion.div className='right-container-text' animate={{opacity:1,y:0}} initial={{opacity:0 ,y:-50}} transition={{duration:.8}}>
           <div className='degree'>
-            <h1>{(currentWeather.temp - 273.5).toFixed(1)} </h1>
-            <h2> °C</h2>
+            <h1 >{(currentWeather.temp - 273.5).toFixed(1)} </h1>
+            <h2 > °C</h2>
           </div>
           <div className='location'>
             <h3>{weather.name}</h3>
@@ -171,7 +123,43 @@ function App() {
             <img src={`http://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`}></img>
             <h2>{currentWeather.name}</h2>
           </div>
+        </motion.div>
+  )
+}
+
+function LeftAnim(){
+  return(
+    <motion.div className='left-container-align' initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.8}}>
+      <Left changeCity={(name => setCity(name))} />
+      <div className='left-container-forecastData-container'>
+          <motion.h2 className='left-container-forecastData-heading' initial={{y:-10,opacity:.5}} animate={{ y:0,opacity:1}} transition={{duration:.5}}> forecast of {weather.name} next few hours</motion.h2>
+          <div className='left-container-forecastData'>
+          <ul>
+            {weather.weather.map((e, index) => (new Date()) <= (new Date(e.dt_txt)) ?
+              <motion.div key={index} className="forecast-single-container" initial={{y:-20,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:1}}>
+              <img src={`http://openweathermap.org/img/wn/${e.weather[0].icon}@2x.png`}></img>
+              <h2>{(e.main.temp - 273.5).toFixed(1)}°C</h2>
+              <h4>{e.weather[0].main}</h4>
+              <h5>{ new Date(e.dt_txt).toLocaleTimeString()}</h5>
+              </motion.div> : <> </>
+            )}
+          </ul>
+          </div>
         </div>
+    </motion.div>
+  )
+}
+
+  
+  return (
+    <div className='main-container'>
+
+     <Display />
+      <div className='left-container'>
+       <LeftAnim />
+      </div>
+      <div className='right-container'>
+      <AnimationRight />
       </div>
     </div>
 
